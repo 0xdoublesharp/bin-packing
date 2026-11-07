@@ -11,7 +11,7 @@ This page records source configuration, not runtime or platform qualification.
 | Workspace / npm version | `0.6.0` |
 | Release notes | [v0.6.0](releases/v0.6.0.md) |
 | Minimum Rust version | `1.99` |
-| Pinned Rust toolchain | `1.99.0` |
+| Pinned Rust toolchain | `1.99.1` |
 | Native Node engine | `>=18` |
 | WASM Node engine | `>=18` |
 | CI Node version | `22` |
