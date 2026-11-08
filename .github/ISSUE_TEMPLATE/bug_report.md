@@ -5,7 +5,7 @@ title: ""
 ---
 
 <!-- For suspected vulnerabilities, follow SECURITY.md instead of posting details here:
-https://github.com/doublesharp/bin-packing/blob/main/SECURITY.md -->
+https://github.com/0xdoublesharp/bin-packing/blob/main/SECURITY.md -->
 
 ## Problem
 
