@@ -16,7 +16,7 @@ This page records source configuration, not runtime or platform qualification.
 | WASM Node engine | `>=18` |
 | CI Node version | `22` |
 | CI TypeScript | `5.9.3` |
-| CI Playwright | `1.56.1` |
+| CI Playwright | `1.65.0` |
 | CI browser runner | `ubuntu-24.04` |
 
 ## Cargo features
