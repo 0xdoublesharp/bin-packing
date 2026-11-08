@@ -12,6 +12,6 @@ the main package to use the JavaScript API and TypeScript types:
 npm install @0xdoublesharp/bin-packing
 ```
 
-See the [main package README](https://github.com/doublesharp/bin-packing/blob/main/bindings/node/README.md)
-for usage and API details, or the [project README](https://github.com/doublesharp/bin-packing/blob/main/README.md)
+See the [main package README](https://github.com/0xdoublesharp/bin-packing/blob/main/bindings/node/README.md)
+for usage and API details, or the [project README](https://github.com/0xdoublesharp/bin-packing/blob/main/README.md)
 for a library overview.

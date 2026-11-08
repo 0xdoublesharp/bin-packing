@@ -9,7 +9,11 @@ Rust crate — a cut list and bin packing optimizer for 1D cutting stock (linear
 bar / pipe), 2D rectangular sheet packing, 3D box packing, staged cutting, stack loading and native irregular nesting.
 
 Prebuilt binaries for Linux (x64, arm64), macOS (x64, arm64), and Windows
-(x64, arm64). No Rust toolchain required.
+(x64, arm64). No Rust toolchain required. Installing this package selects the
+matching native binary automatically.
+
+See the [v0.6.1 release notes](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.1/docs/releases/v0.6.1.md)
+for dependency security fixes and native package documentation updates.
 
 ## Install
 
@@ -19,9 +23,9 @@ pnpm add @0xdoublesharp/bin-packing
 
 ## Usage
 
-See the [complete JavaScript API guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.0/docs/bindings.md)
+See the [complete JavaScript API guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.1/docs/bindings.md)
 for physical/objective examples and the
-[generated reference](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.0/docs/reference.md)
+[generated reference](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.1/docs/reference.md)
 for exports, defaults and supported entry points.
 
 The explicit-objective APIs are `solve1dOptimized`, `solve2dOptimized` and
@@ -206,7 +210,7 @@ binaries, see
 `plan2dSawCuts(job, options?)` is the opt-in physical planner. Supply the original
 problem, layouts, and explicit stock/demand index maps. It returns one ordered job
 with workpiece ancestry, kerf bands, real settings and measured operation counts.
-See [the API and migration guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.0/docs/two-d/saw-planner.md) and run
+See [the API and migration guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.1/docs/two-d/saw-planner.md) and run
 `node ../../examples/saw-planner.mjs native` after building this package.
 
 ## License

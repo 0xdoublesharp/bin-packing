@@ -25,7 +25,10 @@ bindings.
 
 ## Features
 
-See the [v0.6.0 release notes](docs/releases/v0.6.0.md) for changes and compatibility notes. The
+Version 0.6.1 refreshes dependency security fixes, native package READMEs, and
+release tooling. The solver APIs and packing models are unchanged.
+
+See the [v0.6.1 release notes](docs/releases/v0.6.1.md) for changes and compatibility notes. The
 [testing guide](docs/testing-confidence.md) explains validation and coverage.
 
 ### Native geometry, physical rules and explicit objectives
@@ -383,7 +386,7 @@ Add the crate to your `Cargo.toml`:
 <!-- BEGIN GENERATED: dependency -->
 ```toml
 [dependencies]
-bin-packing = "0.6.0"
+bin-packing = "0.6.1"
 ```
 <!-- END GENERATED: dependency -->
 

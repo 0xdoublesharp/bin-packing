@@ -8,8 +8,8 @@ This page records source configuration, not runtime or platform qualification.
 
 | Fact | Source value |
 | --- | --- |
-| Workspace / npm version | `0.6.0` |
-| Release notes | [v0.6.0](releases/v0.6.0.md) |
+| Workspace / npm version | `0.6.1` |
+| Release notes | [v0.6.1](releases/v0.6.1.md) |
 | Minimum Rust version | `1.99` |
 | Pinned Rust toolchain | `1.99.1` |
 | Native Node engine | `>=18` |
