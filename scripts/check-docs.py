@@ -36,11 +36,21 @@ def headings(text):
     return anchors
 
 
+def own_blob_path(repository):
+    """Match this repository's GitHub blob paths; the owner follows Cargo's `repository`."""
+    location = urlsplit(repository or '')
+    if location.netloc != 'github.com':
+        return None
+    return re.compile(re.escape(location.path.rstrip('/')) + r'/blob/(main|v\d+\.\d+\.\d+)/(.*)')
+
+
 def local_link_errors(root):
     """Check inline/reference links and Markdown anchors without fetching the web."""
     errors = []
     cargo = root / 'Cargo.toml'
-    version = tomllib.loads(cargo.read_text())['workspace']['package']['version'] if cargo.exists() else None
+    package = tomllib.loads(cargo.read_text())['workspace']['package'] if cargo.exists() else {}
+    version = package.get('version')
+    own_blob = own_blob_path(package.get('repository'))
     for page in markdown_files(root):
         text = page.read_text()
         # Fenced source examples can contain Markdown-like text that is not a link.
@@ -49,7 +59,7 @@ def local_link_errors(root):
         links += re.findall(r'^\[[^]]+\]:\s*(\S+)', prose, re.M)
         for raw in links:
             target = urlsplit(raw.strip('<>'))
-            own = re.fullmatch(r'/doublesharp/bin-packing/blob/(main|v\d+\.\d+\.\d+)/(.*)', target.path)
+            own = own_blob.fullmatch(target.path) if own_blob else None
             if target.netloc == 'github.com' and own and own[1] in {'main', f'v{version}'}:
                 target = target._replace(scheme='', netloc='', path=own[2])
                 destination = root / unquote(target.path)
@@ -126,6 +136,13 @@ def pin_release_links(root, page, text, version, repository):
     return re.sub(r'(?<!!)\[([^]\n]+)\]\(([^)\s]+)\)', replace, text)
 
 
+def pin_repository_links(text, version, repository):
+    """Pin this repository's main or release blob links to the selected version."""
+    base = repository.rstrip('/')
+    return re.sub(re.escape(base) + r'/blob/(?:main|v\d+\.\d+\.\d+)/',
+                  lambda _: f'{base}/blob/v{version}/', text)
+
+
 def render_reference(root, defaults):
     workspace = tomllib.loads((root / 'Cargo.toml').read_text())['workspace']['package']
     core = tomllib.loads((root / 'crates/bin-packing/Cargo.toml').read_text())
@@ -199,8 +216,7 @@ def generated_files(root, defaults):
     files[notes] = pin_release_links(root, notes, notes.read_text(), version, metadata['repository'])
     for name in ['node', 'wasm']:
         page = root / f'bindings/{name}/README.md'
-        files[page] = re.sub(r'https://github.com/doublesharp/bin-packing/blob/(?:main|v\d+\.\d+\.\d+)/',
-                             f'https://github.com/doublesharp/bin-packing/blob/v{version}/', page.read_text())
+        files[page] = pin_repository_links(page.read_text(), version, metadata['repository'])
         if name == 'wasm':
             begin, end = '<!-- BEGIN GENERATED: wasm-imports -->', '<!-- END GENERATED: wasm-imports -->'
             if files[page].count(begin) != 1 or files[page].count(end) != 1:

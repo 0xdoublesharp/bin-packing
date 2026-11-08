@@ -88,14 +88,36 @@ class DocumentationTests(unittest.TestCase):
     def test_current_release_and_main_github_links_are_checked_as_local_files(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            (root / 'Cargo.toml').write_text('[workspace.package]\nversion="0.6.0"\n')
-            prefix = 'https://github.com/doublesharp/bin-packing/blob/'
+            (root / 'Cargo.toml').write_text(
+                '[workspace.package]\nversion="0.6.0"\nrepository="https://github.com/0xdoublesharp/bin-packing"\n')
+            prefix = 'https://github.com/0xdoublesharp/bin-packing/blob/'
             (root / 'README.md').write_text(
                 f'[main]({prefix}main/missing.md)\n[release]({prefix}v0.6.0/guide.md#missing)\n')
             (root / 'guide.md').write_text('# Existing\n')
             self.assertEqual(len(DOCS.local_link_errors(root)), 2)
             (root / 'README.md').write_text(f'[valid]({prefix}v0.6.0/guide.md#existing)\n')
             self.assertEqual(DOCS.local_link_errors(root), [])
+
+    def test_repository_links_follow_the_manifest_owner(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / 'Cargo.toml').write_text(
+                '[workspace.package]\nversion="0.6.0"\nrepository="https://github.com/new-owner/bin-packing"\n')
+            (root / 'README.md').write_text(
+                '[moved](https://github.com/new-owner/bin-packing/blob/main/missing.md)\n'
+                '[other](https://github.com/old-owner/bin-packing/blob/main/missing.md)\n')
+            errors = DOCS.local_link_errors(root)
+            self.assertEqual(len(errors), 1, 'only links into the manifest repository are checked as local files')
+            self.assertIn('new-owner', errors[0])
+
+    def test_binding_readme_pins_only_the_manifest_repository(self):
+        repository = 'https://github.com/new-owner/bin-packing'
+        text = (f'[guide]({repository}/blob/main/docs/guide.md) [notes]({repository}/blob/v0.5.0/README.md) '
+                '[other](https://github.com/old-owner/bin-packing/blob/main/docs/guide.md)')
+        result = DOCS.pin_repository_links(text, '0.6.0', repository)
+        self.assertIn(f'[guide]({repository}/blob/v0.6.0/docs/guide.md)', result)
+        self.assertIn(f'[notes]({repository}/blob/v0.6.0/README.md)', result)
+        self.assertIn('[other](https://github.com/old-owner/bin-packing/blob/main/docs/guide.md)', result)
 
     def test_reference_follows_versions_exports_features_and_real_default_values(self):
         with tempfile.TemporaryDirectory() as temporary:
