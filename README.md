@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/doublesharp/bin-packing/main/docs/bin-packing.png" alt="bin-packing" width="200">
+  <img src="https://raw.githubusercontent.com/0xdoublesharp/bin-packing/main/docs/bin-packing.png" alt="bin-packing" width="200">
 </p>
 
 # Bin Packing

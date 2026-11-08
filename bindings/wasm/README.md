@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/doublesharp/bin-packing/main/docs/bin-packing.png" alt="bin-packing" width="200">
+  <img src="https://raw.githubusercontent.com/0xdoublesharp/bin-packing/main/docs/bin-packing.png" alt="bin-packing" width="200">
 </p>
 
 # @0xdoublesharp/bin-packing-wasm
@@ -9,7 +9,7 @@ Rust crate — a cut list and bin packing optimizer for 1D cutting stock (linear
 bar / pipe), 2D rectangular sheet packing, 3D box packing, staged cutting, stack loading and native irregular nesting.
 
 Provides browser and Node.js targets without native binaries or `node-gyp`.
-See the [generated engine and export reference](https://github.com/doublesharp/bin-packing/blob/v0.6.0/docs/reference.md)
+See the [generated engine and export reference](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.0/docs/reference.md)
 for the Node engine range. Deno, Bun and worker-host integrations may require
 loader configuration and are not covered by the Node/Chromium qualification.
 
@@ -47,9 +47,9 @@ yarn add @0xdoublesharp/bin-packing-wasm
 
 ## Usage
 
-See the [complete JavaScript API guide](https://github.com/doublesharp/bin-packing/blob/v0.6.0/docs/bindings.md)
+See the [complete JavaScript API guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.0/docs/bindings.md)
 for physical/objective examples and the
-[generated reference](https://github.com/doublesharp/bin-packing/blob/v0.6.0/docs/reference.md)
+[generated reference](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.0/docs/reference.md)
 for exports, defaults and supported entry points.
 
 The explicit-objective APIs are `solve1dOptimized`, `solve2dOptimized` and
@@ -164,7 +164,7 @@ import { solve2d } from '@0xdoublesharp/bin-packing-wasm/two-d';
 ```
 
 Payload size depends on the selected models, target and toolchain. The
-[dated expansion report](https://github.com/doublesharp/bin-packing/blob/v0.6.0/docs/experiments/2026-10-28-packingsolver-completion.md)
+[dated expansion report](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.0/docs/experiments/2026-10-28-packingsolver-completion.md)
 records measured sizes; build the current tree to measure a new release.
 
 ### Browser (raw ES modules / Deno)
@@ -406,7 +406,7 @@ import type {
 ## Building from source
 
 ```sh
-git clone https://github.com/doublesharp/bin-packing
+git clone https://github.com/0xdoublesharp/bin-packing
 cd bin-packing/bindings/wasm
 
 # One-time prerequisites
@@ -424,7 +424,7 @@ pnpm test
 
 `plan2dSawCuts(job, options?)` is available in combined and `two-d` builds for every
 target. It accepts explicit stock/demand provenance and returns one authoritative
-physical schedule. See [the API and migration guide](https://github.com/doublesharp/bin-packing/blob/v0.6.0/docs/two-d/saw-planner.md).
+physical schedule. See [the API and migration guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.0/docs/two-d/saw-planner.md).
 After building, run `node ../../examples/saw-planner.mjs wasm` or use `two-d`.
 
 ## License

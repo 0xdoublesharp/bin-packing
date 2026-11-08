@@ -6,7 +6,7 @@
   "packageManager": "pnpm@10.25.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/doublesharp/bin-packing.git",
+    "url": "git+https://github.com/0xdoublesharp/bin-packing.git",
     "directory": "bindings/node"
   },
   "publishConfig": {

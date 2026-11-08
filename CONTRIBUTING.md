@@ -6,7 +6,7 @@ rules and follow the [code of conduct](CODE_OF_CONDUCT.md) in project spaces.
 
 ## Before you start
 
-Search existing [issues](https://github.com/doublesharp/bin-packing/issues) and
+Search existing [issues](https://github.com/0xdoublesharp/bin-packing/issues) and
 pull requests before opening a new one. For a new algorithm, public API change,
 or substantial performance change, open an issue first to describe the use case,
 constraints, and proposed approach. Small fixes and documentation corrections
