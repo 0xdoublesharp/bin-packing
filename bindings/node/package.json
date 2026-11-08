@@ -42,7 +42,7 @@
     "artifacts": "napi artifacts --output-dir artifacts",
     "build": "node ../../scripts/package-command.cjs napi build --platform --release",
     "build:debug": "node ../../scripts/package-command.cjs napi build --platform",
-    "create:npm-dirs": "napi create-npm-dirs",
+    "create:npm-dirs": "napi create-npm-dirs && node scripts/copy-native-readmes.cjs",
     "prepublish:native": "napi pre-publish --tag-style npm",
     "test": "node ../../scripts/package-command.cjs node --test test/smoke.test.js ../test/finder.test.cjs",
     "test:package": "node ../../scripts/package-command.cjs node ../test/package-native.cjs"
