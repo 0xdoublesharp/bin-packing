@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/doublesharp/bin-packing/main/docs/bin-packing.png" alt="bin-packing" width="200">
+  <img src="https://raw.githubusercontent.com/0xdoublesharp/bin-packing/main/docs/bin-packing.png" alt="bin-packing" width="200">
 </p>
 
 # @0xdoublesharp/bin-packing
@@ -19,9 +19,9 @@ pnpm add @0xdoublesharp/bin-packing
 
 ## Usage
 
-See the [complete JavaScript API guide](https://github.com/doublesharp/bin-packing/blob/v0.6.0/docs/bindings.md)
+See the [complete JavaScript API guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.0/docs/bindings.md)
 for physical/objective examples and the
-[generated reference](https://github.com/doublesharp/bin-packing/blob/v0.6.0/docs/reference.md)
+[generated reference](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.0/docs/reference.md)
 for exports, defaults and supported entry points.
 
 The explicit-objective APIs are `solve1dOptimized`, `solve2dOptimized` and
@@ -206,7 +206,7 @@ binaries, see
 `plan2dSawCuts(job, options?)` is the opt-in physical planner. Supply the original
 problem, layouts, and explicit stock/demand index maps. It returns one ordered job
 with workpiece ancestry, kerf bands, real settings and measured operation counts.
-See [the API and migration guide](https://github.com/doublesharp/bin-packing/blob/v0.6.0/docs/two-d/saw-planner.md) and run
+See [the API and migration guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.0/docs/two-d/saw-planner.md) and run
 `node ../../examples/saw-planner.mjs native` after building this package.
 
 ## License

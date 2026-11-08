@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/doublesharp/bin-packing.git",
+    "url": "git+https://github.com/0xdoublesharp/bin-packing.git",
     "directory": "bindings/wasm"
   },
   "keywords": [
