@@ -53,9 +53,13 @@ and complete Rust examples run in the quality job.
 The workflow verifies that the stable tag equals Cargo and both npm versions,
 prepares the exact-version native optional dependencies, checks tarballs, uses
 `cargo publish --dry-run`, then publishes packages and creates the GitHub release
-using this version's release notes. npm uses configured trusted publishing;
-crates.io uses the repository's configured token. Never print credentials or
-move publication to an unrelated credential context to bypass a failed gate.
+using this version's release notes. npm and crates.io both use trusted
+publishing (OIDC) configured for repository `0xdoublesharp/bin-packing` and
+workflow `ci.yml`, so the repository stores no registry token. The job requests
+its short-lived crates.io token before the first publish step, so a missing
+crates.io trusted publisher stops the release before anything is published.
+Never print credentials or move publication to an unrelated credential context
+to bypass a failed gate.
 
 For a failed existing-tag release, inspect the precise failed step and registries
 first. `workflow_dispatch` accepts an existing stable tag, but the publish steps
