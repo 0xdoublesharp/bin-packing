@@ -36,7 +36,7 @@ For a quick feature tour or a Getting Started guide, see the top-level
 - [1D minimum cost](one-d/min-cost.md): stock-price optimization under inventory
   and work limits.
 
-See [v0.6.0](releases/v0.6.0.md) for release and compatibility notes and the
+See [v0.6.1](releases/v0.6.1.md) for release and compatibility notes and the
 [testing guide](testing-confidence.md) for verification commands and proof scope.
 
 ## 1D algorithms
