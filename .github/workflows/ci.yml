@@ -38,6 +38,19 @@ jobs:
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
 
+      - name: Configure Cargo Steward wrapper
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          if [[ -n "${RUSTC_WRAPPER:-}" && "$RUSTC_WRAPPER" != cargo-steward ]]; then
+            printf 'CARGO_STEWARD_INNER=%s\n' "$RUSTC_WRAPPER" >> "$GITHUB_ENV"
+          fi
+          echo "RUSTC_WRAPPER=cargo-steward" >> "$GITHUB_ENV"
+      - name: Track Cargo build cache
+        if: runner.os != 'Windows'
+        uses: 0xdoublesharp/cargo-steward@v0.2.2
+        with:
+          mode: start
       - name: Install repo quality tools
         uses: taiki-e/install-action@v2
         with:
@@ -48,6 +61,12 @@ jobs:
 
       - name: Check feature combinations and fuzz project
         run: ./scripts/check-features.sh
+      - name: Trim Cargo build cache
+        if: runner.os != 'Windows'
+        uses: 0xdoublesharp/cargo-steward@v0.2.2
+        with:
+          mode: trim
+          budget: 4GiB
 
   node:
     name: Node binding
@@ -64,6 +83,19 @@ jobs:
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
 
+      - name: Configure Cargo Steward wrapper
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          if [[ -n "${RUSTC_WRAPPER:-}" && "$RUSTC_WRAPPER" != cargo-steward ]]; then
+            printf 'CARGO_STEWARD_INNER=%s\n' "$RUSTC_WRAPPER" >> "$GITHUB_ENV"
+          fi
+          echo "RUSTC_WRAPPER=cargo-steward" >> "$GITHUB_ENV"
+      - name: Track Cargo build cache
+        if: runner.os != 'Windows'
+        uses: 0xdoublesharp/cargo-steward@v0.2.2
+        with:
+          mode: start
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
@@ -88,6 +120,12 @@ jobs:
 
       - name: Run native documentation examples
         run: node bindings/test/docs-examples.cjs native
+      - name: Trim Cargo build cache
+        if: runner.os != 'Windows'
+        uses: 0xdoublesharp/cargo-steward@v0.2.2
+        with:
+          mode: trim
+          budget: 4GiB
 
   wasm:
     name: WebAssembly package
@@ -104,6 +142,19 @@ jobs:
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
 
+      - name: Configure Cargo Steward wrapper
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          if [[ -n "${RUSTC_WRAPPER:-}" && "$RUSTC_WRAPPER" != cargo-steward ]]; then
+            printf 'CARGO_STEWARD_INNER=%s\n' "$RUSTC_WRAPPER" >> "$GITHUB_ENV"
+          fi
+          echo "RUSTC_WRAPPER=cargo-steward" >> "$GITHUB_ENV"
+      - name: Track Cargo build cache
+        if: runner.os != 'Windows'
+        uses: 0xdoublesharp/cargo-steward@v0.2.2
+        with:
+          mode: start
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
@@ -152,6 +203,12 @@ jobs:
           name: wasm-dist
           path: bindings/wasm/dist
           if-no-files-found: error
+      - name: Trim Cargo build cache
+        if: runner.os != 'Windows'
+        uses: 0xdoublesharp/cargo-steward@v0.2.2
+        with:
+          mode: trim
+          budget: 4GiB
 
   node-native-release:
     name: Build Node native ${{ matrix.target }}
@@ -190,6 +247,19 @@ jobs:
         with:
           key: node-native-${{ matrix.target }}
 
+      - name: Configure Cargo Steward wrapper
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          if [[ -n "${RUSTC_WRAPPER:-}" && "$RUSTC_WRAPPER" != cargo-steward ]]; then
+            printf 'CARGO_STEWARD_INNER=%s\n' "$RUSTC_WRAPPER" >> "$GITHUB_ENV"
+          fi
+          echo "RUSTC_WRAPPER=cargo-steward" >> "$GITHUB_ENV"
+      - name: Track Cargo build cache
+        if: runner.os != 'Windows'
+        uses: 0xdoublesharp/cargo-steward@v0.2.2
+        with:
+          mode: start
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
@@ -223,6 +293,12 @@ jobs:
           name: node-native-${{ matrix.target }}
           path: bindings/node/bin-packing.*.node
           if-no-files-found: error
+      - name: Trim Cargo build cache
+        if: runner.os != 'Windows'
+        uses: 0xdoublesharp/cargo-steward@v0.2.2
+        with:
+          mode: trim
+          budget: 4GiB
 
   publish:
     name: Publish crates.io and npm
