@@ -59,17 +59,23 @@ impl AxisScale {
     fn apply(self, length: u32, capacity: u32) -> u32 {
         match self {
             Self::Identity => length,
-            Self::Floor(divisor) => length / divisor,
-            Self::Threshold(threshold) => {
-                if length < threshold {
-                    0
-                } else if length > capacity - threshold {
-                    capacity
-                } else {
-                    length
-                }
-            }
+            Self::Floor(divisor) => scale_floor(length, divisor),
+            Self::Threshold(threshold) => scale_threshold(length, threshold, capacity),
         }
+    }
+}
+
+fn scale_floor(length: u32, divisor: u32) -> u32 {
+    length / divisor
+}
+
+fn scale_threshold(length: u32, threshold: u32, capacity: u32) -> u32 {
+    if length < threshold {
+        0
+    } else if length > capacity - threshold {
+        capacity
+    } else {
+        length
     }
 }
 

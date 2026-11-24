@@ -5,6 +5,7 @@ use super::model::{
     Bin3D, BinLayout3D, BoxDemand3D, ItemInstance3D, MAX_BIN_COUNT_3D, MAX_DIMENSION_3D,
     Placement3D, SolverMetrics3D, ThreeDSolution,
 };
+use crate::axis::end_with_gap_at_most;
 
 /// An axis-aligned free cuboid inside a bin.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -62,7 +63,10 @@ pub(crate) fn placement_feasible(
     bin_d: u32,
     placed: &[Placement3D],
 ) -> bool {
-    if x.saturating_add(w) > bin_w || y.saturating_add(h) > bin_h || z.saturating_add(d) > bin_d {
+    if !end_with_gap_at_most(x, w, 0, bin_w)
+        || !end_with_gap_at_most(y, h, 0, bin_h)
+        || !end_with_gap_at_most(z, d, 0, bin_d)
+    {
         return false;
     }
     placed.iter().all(|other| !candidate_overlaps_placement(x, y, z, w, h, d, other))
@@ -270,6 +274,12 @@ mod tests {
     fn placement_feasible_rejects_overlap() {
         let placed = vec![placement(0, 0, 0, 5, 5, 5)];
         assert!(!placement_feasible(2, 2, 2, 4, 4, 4, 10, 10, 10, &placed));
+    }
+
+    #[test]
+    fn placement_feasible_distinguishes_maximum_boundary_from_overrun() {
+        assert!(placement_feasible(u32::MAX - 1, 0, 0, 1, 1, 1, u32::MAX, 1, 1, &[]));
+        assert!(!placement_feasible(u32::MAX, 0, 0, 1, 1, 1, u32::MAX, 1, 1, &[]));
     }
 
     #[test]

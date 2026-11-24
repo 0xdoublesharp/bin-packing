@@ -1,0 +1,24 @@
+name = "PackingProofs"
+
+[[lean_lib]]
+name = "Packing"
+roots = [
+  "Packing",
+  "Indexed",
+  "Staged",
+  "Optimality",
+  "ExactLinear",
+  "ExactGrid",
+  "Loading",
+  "Circles",
+  "Saw",
+  "Polygons",
+  "Orthogonal",
+  "Sloped",
+  "Bounds",
+  "Optimization",
+  "Reuse",
+  "CutPlan",
+  "IrregularExact",
+  "AccountingAndSemantics",
+]

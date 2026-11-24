@@ -4,6 +4,7 @@ use std::collections::HashSet;
 
 use serde::{Deserialize, Serialize};
 
+use crate::axis::{area_u64, effective_axis_bound};
 use crate::{BinPackingError, Result};
 
 /// Algorithm selector for [`solve_2d`](super::solve_2d).
@@ -95,11 +96,10 @@ pub struct Sheet2D {
 /// placement to extend up to one kerf past the sheet boundary. When `false`,
 /// returns the sheet's declared dimensions unchanged.
 pub(crate) fn effective_bounds(sheet: &Sheet2D) -> (u32, u32) {
-    if sheet.edge_kerf_relief {
-        (sheet.width.saturating_add(sheet.kerf), sheet.height.saturating_add(sheet.kerf))
-    } else {
-        (sheet.width, sheet.height)
-    }
+    (
+        effective_axis_bound(sheet.width, sheet.kerf, sheet.edge_kerf_relief),
+        effective_axis_bound(sheet.height, sheet.kerf, sheet.edge_kerf_relief),
+    )
 }
 
 /// A demand for a set of identical rectangular pieces.
@@ -534,7 +534,7 @@ impl TwoDProblem {
 
 impl Rect {
     pub(crate) fn area(self) -> u64 {
-        u64::from(self.width) * u64::from(self.height)
+        area_u64(self.width, self.height)
     }
 
     pub(crate) fn fits(self, width: u32, height: u32) -> bool {

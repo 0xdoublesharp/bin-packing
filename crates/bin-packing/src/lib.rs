@@ -120,6 +120,8 @@
 #![warn(missing_docs)]
 #![deny(rustdoc::broken_intra_doc_links)]
 
+#[cfg(any(feature = "one-d", feature = "two-d"))]
+mod axis;
 pub mod cut_plan;
 mod error;
 #[cfg(feature = "irregular")]

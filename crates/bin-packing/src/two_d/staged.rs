@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 use super::constrained::{ConstrainedProblem2D, PackingObjective2D, SheetConstraints2D};
 use super::model::ItemInstance2D;
 use super::{Placement2D, Sheet2D, SheetLayout2D, SolverMetrics2D, TwoDSolution};
+use crate::axis::end_with_gap_at_most;
 use crate::{BinPackingError, Result};
 
 /// Axis of a full-span physical cut.
@@ -523,11 +524,10 @@ fn extent(region: StagedRegion2D, axis: StagedAxis2D) -> u32 {
 }
 
 fn separated(a: StagedRegion2D, b: StagedRegion2D, kerf: u32) -> bool {
-    let k = u64::from(kerf);
-    u64::from(a.x) + u64::from(a.width) + k <= u64::from(b.x)
-        || u64::from(b.x) + u64::from(b.width) + k <= u64::from(a.x)
-        || u64::from(a.y) + u64::from(a.height) + k <= u64::from(b.y)
-        || u64::from(b.y) + u64::from(b.height) + k <= u64::from(a.y)
+    end_with_gap_at_most(a.x, a.width, kerf, b.x)
+        || end_with_gap_at_most(b.x, b.width, kerf, a.x)
+        || end_with_gap_at_most(a.y, a.height, kerf, b.y)
+        || end_with_gap_at_most(b.y, b.height, kerf, a.y)
 }
 
 /// Reconstruct a full-span partition independently from stored child regions.

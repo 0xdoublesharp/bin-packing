@@ -3,11 +3,21 @@
 use bin_packing::three_d::constrained::ConstrainedProblem3D;
 use bin_packing::three_d::loading::{LoadingProblem3D, LoadingSolution3D};
 
-pub(crate) const MAX_SAFE_JS_INTEGER: u64 = (1_u64 << 53) - 1;
+const UNSAFE_INTEGER: &str =
+    "weights and loading limits must be nonnegative JavaScript safe integers";
+const PAYLOAD_OVERFLOW: &str = "bin payload exceeds JavaScript safe integers";
+
+fn is_safe_js_integer(value: u64) -> bool {
+    value <= 9_007_199_254_740_991 // Number.MAX_SAFE_INTEGER
+}
+
+fn is_safe_js_sum(acc: u64, weight: u64) -> bool {
+    acc as u128 + weight as u128 <= 9_007_199_254_740_991
+}
 
 fn safe(values: impl IntoIterator<Item = u64>) -> Result<(), &'static str> {
-    if values.into_iter().any(|value| value > MAX_SAFE_JS_INTEGER) {
-        return Err("weights and loading limits must be nonnegative JavaScript safe integers");
+    if !values.into_iter().all(is_safe_js_integer) {
+        return Err(UNSAFE_INTEGER);
     }
     Ok(())
 }
@@ -44,19 +54,30 @@ pub(crate) fn indexed_payloads(
     weights: &[u64],
     indices: &[Vec<usize>],
 ) -> Result<(), &'static str> {
-    for layout in indices {
-        let mut payload = 0u64;
-        for &index in layout {
-            let weight = if weights.is_empty() {
-                0
-            } else {
-                *weights.get(index).ok_or("invalid indexed loading source")?
-            };
-            payload = payload
-                .checked_add(weight)
-                .ok_or("bin payload exceeds JavaScript safe integers")?;
+    let weight_at = |index| {
+        if weights.is_empty() {
+            Ok(0)
+        } else {
+            weights.get(index).copied().ok_or("invalid indexed loading source")
         }
-        safe([payload])?;
+    };
+    for layout in indices {
+        let Some((&last, prefix)) = layout.split_last() else {
+            continue;
+        };
+        let mut payload = 0u64;
+        for &index in prefix {
+            payload = payload.checked_add(weight_at(index)?).ok_or(PAYLOAD_OVERFLOW)?;
+        }
+        let weight = weight_at(last)?;
+        // Check the final sum before exposing the payload to JavaScript.
+        if !is_safe_js_sum(payload, weight) {
+            return Err(if payload.checked_add(weight).is_some() {
+                UNSAFE_INTEGER
+            } else {
+                PAYLOAD_OVERFLOW
+            });
+        }
     }
     Ok(())
 }

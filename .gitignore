@@ -33,3 +33,7 @@ npm-debug.log*
 /reports/
 /data/
 *-evidence/
+
+# Generated Lean module objects and local build metadata
+/proofs/.lake/
+/proofs/lake-manifest.json

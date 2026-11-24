@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 
 use super::model::{ItemInstance2D, Rect};
 use super::{Placement2D, SheetLayout2D, SolverMetrics2D, TwoDProblem, TwoDSolution};
+use crate::axis::{end_with_gap_at_most, fits_trimmed_axis};
 use crate::{BinPackingError, Result};
 
 /// An axis-aligned area of defective material in original sheet coordinates.
@@ -307,12 +308,20 @@ pub fn validate_2d_constrained(
             if placement.name != demand.name
                 || (placement.width, placement.height) != expected
                 || (placement.rotated && !demand.can_rotate)
-                || placement.x < constraints.trim_left
-                || placement.y < constraints.trim_top
-                || u64::from(placement.x) + u64::from(placement.width)
-                    > u64::from(stock.width) - u64::from(constraints.trim_right)
-                || u64::from(placement.y) + u64::from(placement.height)
-                    > u64::from(stock.height) - u64::from(constraints.trim_bottom)
+                || !fits_trimmed_axis(
+                    placement.x,
+                    placement.width,
+                    constraints.trim_left,
+                    constraints.trim_right,
+                    stock.width,
+                )
+                || !fits_trimmed_axis(
+                    placement.y,
+                    placement.height,
+                    constraints.trim_top,
+                    constraints.trim_bottom,
+                    stock.height,
+                )
             {
                 return Err(invalid_solution("placement dimensions, rotation or trimmed bounds"));
             }
@@ -433,11 +442,19 @@ pub(super) fn validate_source(problem: &ConstrainedProblem2D) -> Result<()> {
             return Err(invalid_constraint("totals", "aggregate area or cost would overflow"));
         }
         let constraints = constraints_for(problem, index);
-        if u64::from(constraints.trim_left) + u64::from(constraints.trim_right)
-            >= u64::from(sheet.width)
-            || u64::from(constraints.trim_top) + u64::from(constraints.trim_bottom)
-                >= u64::from(sheet.height)
-        {
+        if !fits_trimmed_axis(
+            constraints.trim_left,
+            1,
+            constraints.trim_left,
+            constraints.trim_right,
+            sheet.width,
+        ) || !fits_trimmed_axis(
+            constraints.trim_top,
+            1,
+            constraints.trim_top,
+            constraints.trim_bottom,
+            sheet.height,
+        ) {
             return Err(invalid_constraint("trims", "must leave positive width and height"));
         }
         for defect in constraints.defects {
@@ -467,11 +484,10 @@ fn placement_rect(placement: &Placement2D) -> Rect {
 
 /// Widened independent disjointness check, including the required blade gap.
 fn separated(left: Rect, right: Rect, kerf: u32) -> bool {
-    let kerf = u64::from(kerf);
-    u64::from(left.x) + u64::from(left.width) + kerf <= u64::from(right.x)
-        || u64::from(right.x) + u64::from(right.width) + kerf <= u64::from(left.x)
-        || u64::from(left.y) + u64::from(left.height) + kerf <= u64::from(right.y)
-        || u64::from(right.y) + u64::from(right.height) + kerf <= u64::from(left.y)
+    end_with_gap_at_most(left.x, left.width, kerf, right.x)
+        || end_with_gap_at_most(right.x, right.width, kerf, left.x)
+        || end_with_gap_at_most(left.y, left.height, kerf, right.y)
+        || end_with_gap_at_most(right.y, right.height, kerf, left.y)
 }
 
 fn padded(rect: Rect, kerf: u32) -> Rect {

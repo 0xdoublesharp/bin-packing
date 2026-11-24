@@ -55,6 +55,10 @@ name = "solver_regressions"
 required-features = ["one-d", "two-d", "three-d"]
 
 [[test]]
+name = "lean_certificates"
+required-features = ["one-d", "two-d", "three-d", "irregular"]
+
+[[test]]
 name = "cut_plan_integration"
 required-features = ["one-d", "two-d"]
 

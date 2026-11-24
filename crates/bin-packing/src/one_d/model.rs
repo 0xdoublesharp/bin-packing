@@ -4,6 +4,7 @@ use std::collections::HashSet;
 
 use serde::{Deserialize, Serialize};
 
+use crate::axis::end_with_gap_at_most;
 use crate::{BinPackingError, Result};
 
 /// Maximum allowed value for stock/demand lengths and kerf/trim. Chosen so that
@@ -385,13 +386,9 @@ impl PackedBin {
     }
 
     pub(crate) fn delta_for_piece(&self, piece: &PieceInstance, stock: &Stock1D) -> Option<u32> {
-        let delta = if self.pieces.is_empty() {
-            piece.length
-        } else {
-            piece.length.saturating_add(stock.kerf)
-        };
-
-        (self.occupied_length.saturating_add(delta) <= stock.usable_length()).then_some(delta)
+        let gap = if self.pieces.is_empty() { 0 } else { stock.kerf };
+        end_with_gap_at_most(self.occupied_length, piece.length, gap, stock.usable_length())
+            .then_some(piece.length.saturating_add(gap))
     }
 
     pub(crate) fn can_fit_piece(&self, piece: &PieceInstance, stock: &Stock1D) -> bool {
@@ -462,7 +459,8 @@ impl OneDSolution {
         });
 
         let total_waste = layouts.iter().map(|layout| u64::from(layout.waste)).sum();
-        let total_cost = layouts.iter().map(|layout| layout.cost).sum();
+        // Canonicalize signed zero so total_cmp applies the next objective key to free stock.
+        let total_cost = layouts.iter().fold(0.0, |total, layout| total + layout.cost);
 
         let mut unplaced_cuts = unplaced
             .iter()

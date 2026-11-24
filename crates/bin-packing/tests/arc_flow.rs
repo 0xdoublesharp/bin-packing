@@ -33,6 +33,23 @@ fn min_cost_can_choose_more_bars_to_reduce_material_cost() {
     assert!(cost_first.exact);
 }
 
+#[test]
+fn min_cost_treats_signed_zeros_as_equal_prices() {
+    let problem = OneDProblem {
+        stock: vec![
+            Stock1D { cost: 0.0, ..stock("large", 10, None) },
+            Stock1D { cost: -0.0, ..stock("small", 5, None) },
+        ],
+        demands: vec![demand("part", 5, 2)],
+    };
+    let result = solve_1d_min_cost(problem.clone(), OneDOptions::default())
+        .expect("both free stock types can satisfy the job");
+    check(&problem, &result);
+    assert!(result.exact);
+    assert_eq!(result.stock_count, 1);
+    assert_eq!(result.total_cost.to_bits(), 0.0_f64.to_bits());
+}
+
 fn check(problem: &OneDProblem, solution: &OneDSolution) {
     let mut counts = BTreeMap::new();
     for cut in solution.layouts.iter().flat_map(|layout| &layout.cuts).chain(&solution.unplaced) {
