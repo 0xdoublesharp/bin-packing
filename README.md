@@ -22,6 +22,8 @@ bindings.
   [`wasm-bindgen`](https://rustwasm.github.io/wasm-bindgen/). Targets browsers and Node.js; other WASM hosts may need loader configuration.
 - Fuzz targets: [fuzz/](fuzz/) — libFuzzer harnesses for the 1D, 2D, and 3D
   entry points.
+- Lean 4 proofs: [proofs/](proofs/) — machine-checked packing, cutting, loading,
+  irregular geometry, bound, optimization, and MIR refinement proofs.
 
 ## Features
 
@@ -902,6 +904,7 @@ crates/bin-packing/          # core solver crate
   tests/solver_regressions.rs
 bindings/node/               # napi-rs Node.js bindings (@0xdoublesharp/bin-packing)
 bindings/wasm/               # wasm-bindgen WebAssembly bindings (@0xdoublesharp/bin-packing-wasm)
+proofs/                      # Lean 4 certificate, lower-bound, optimality, and MIR proofs
 fuzz/fuzz_targets/           # cargo-fuzz / libFuzzer targets (1D + 2D + 3D)
 AGENTS.md                    # contributor rules
 ```
@@ -921,7 +924,40 @@ Full Rust/doc/text/TOML quality gate (matches CI):
 ```
 
 See [correctness checks and production coverage](docs/testing-confidence.md) for
-independent oracle tests and the repeatable line/branch coverage command.
+independent oracle tests, the Lean 4 formal verification suite, and the repeatable
+line/branch coverage command.
+
+### Formal verification (Lean 4 & MIR proofs)
+
+With [Elan](https://lean-lang.org/install/manual/) installed, run the pinned Lean 4
+verification suite (22 proof files, 48 `--verify` certificate tags, no Mathlib
+dependency):
+
+```sh
+./scripts/check-proofs.sh
+```
+
+This runs 287 end-to-end Rust certificate cases, checks dev and release `rustc` MIR
+refinement proofs for six core production arithmetic helpers, audits every Lean
+source file for proof escapes and `set_option` overrides, kernel-audits all local
+Lean theorems against Lean's standard axioms (`propext`, `Quot.sound`,
+`Classical.choice`), and prints pinned toolchain and lockfile SHA-256 digests.
+
+After building the Node.js and WebAssembly packages, verify both JavaScript bindings
+and their `node`/`wasm32` safe-integer MIR guards:
+
+```sh
+./scripts/check-proofs.sh --bindings
+```
+
+To verify a single serialized JSON result (`dimension`, `problem`, `solution`):
+
+```sh
+./scripts/check-proofs.sh --verify < certificate.json
+```
+
+See [Lean verification](docs/testing-confidence.md#lean-verification) for the full
+module table, `--verify` tag list, and stated trusted computing base.
 
 The gate also checks generated docs, local documentation links and runnable
 Rust examples. Refresh source-derived facts with `python3 -B scripts/check-docs.py

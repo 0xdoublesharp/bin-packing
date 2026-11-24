@@ -85,6 +85,8 @@ Run additional checks for the affected boundary:
 - Feature flags, dependencies, or fuzz targets: `./scripts/check-features.sh`.
 - Native or WebAssembly bindings, package exports, or declarations:
   `./scripts/check-bindings.sh`.
+- Lean 4 certificates, MIR refinement proofs, or TCB audit (requires Elan):
+  `./scripts/check-proofs.sh` and `./scripts/check-proofs.sh --bindings`.
 - Algorithms: relevant solver tests and, for performance claims, repeatable
   benchmarks against the same inputs and options.
 

@@ -58,6 +58,8 @@ From the repository root:
 TSC_PATH=/path/to/typescript/lib/tsc.js \
 PLAYWRIGHT_PATH=/path/to/node_modules/playwright \
 ./scripts/check-bindings.sh
+./scripts/check-proofs.sh
+./scripts/check-proofs.sh --bindings
 ```
 
 The feature matrix is defined by `scripts/check-features.sh`. It exercises the
