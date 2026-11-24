@@ -12,8 +12,8 @@ Prebuilt binaries for Linux (x64, arm64), macOS (x64, arm64), and Windows
 (x64, arm64). No Rust toolchain required. Installing this package selects the
 matching native binary automatically.
 
-See the [v0.6.1 release notes](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.1/docs/releases/v0.6.1.md)
-for dependency security fixes and native package documentation updates.
+See the [v0.6.2 release notes](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.2/docs/releases/v0.6.2.md)
+for the Lean 4 formal verification suite and Node/WASM MIR safe-integer proofs.
 
 ## Install
 
@@ -23,9 +23,9 @@ pnpm add @0xdoublesharp/bin-packing
 
 ## Usage
 
-See the [complete JavaScript API guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.1/docs/bindings.md)
+See the [complete JavaScript API guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.2/docs/bindings.md)
 for physical/objective examples and the
-[generated reference](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.1/docs/reference.md)
+[generated reference](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.2/docs/reference.md)
 for exports, defaults and supported entry points.
 
 The explicit-objective APIs are `solve1dOptimized`, `solve2dOptimized` and
@@ -210,7 +210,7 @@ binaries, see
 `plan2dSawCuts(job, options?)` is the opt-in physical planner. Supply the original
 problem, layouts, and explicit stock/demand index maps. It returns one ordered job
 with workpiece ancestry, kerf bands, real settings and measured operation counts.
-See [the API and migration guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.1/docs/two-d/saw-planner.md) and run
+See [the API and migration guide](https://github.com/0xdoublesharp/bin-packing/blob/v0.6.2/docs/two-d/saw-planner.md) and run
 `node ../../examples/saw-planner.mjs native` after building this package.
 
 ## License

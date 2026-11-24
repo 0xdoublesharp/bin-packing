@@ -27,11 +27,13 @@ bindings.
 
 ## Features
 
-Version 0.6.1 refreshes dependency security fixes, native package READMEs, and
-release tooling. The solver APIs and packing models are unchanged.
+Version 0.6.2 adds a pinned Lean 4 formal verification suite covering packing,
+cutting, loading, irregular geometry, lower bounds, exact optimization claims,
+and production Rust/Node/WASM MIR refinement proofs. The solver APIs and
+packing models are unchanged.
 
-See the [v0.6.1 release notes](docs/releases/v0.6.1.md) for changes and compatibility notes. The
-[testing guide](docs/testing-confidence.md) explains validation and coverage.
+See the [v0.6.2 release notes](docs/releases/v0.6.2.md) for changes and compatibility notes. The
+[testing guide](docs/testing-confidence.md) explains validation, Lean proofs, and coverage.
 
 ### Native geometry, physical rules and explicit objectives
 
@@ -388,7 +390,7 @@ Add the crate to your `Cargo.toml`:
 <!-- BEGIN GENERATED: dependency -->
 ```toml
 [dependencies]
-bin-packing = "0.6.1"
+bin-packing = "0.6.2"
 ```
 <!-- END GENERATED: dependency -->
 
